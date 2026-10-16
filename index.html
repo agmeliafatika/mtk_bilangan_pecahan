@@ -1,0 +1,1167 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pecahan Ceria - Petualangan Matematika Kelas 4 SD</title>
+  <meta name="description" content="Website pembelajaran interaktif materi pecahan matematika untuk kelas 4 SD berbasis gamifikasi. Lengkap dengan materi manipulatif, game seru, video, kuis, dan sertifikat prestasi.">
+  <meta name="keywords" content="pecahan kelas 4 sd, kurikulum merdeka matematika, media pembelajaran pecahan, game matematika pecahan">
+  
+  <!-- Favicon Emoji -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍕</text></svg>">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Floating Background Ambient Bubbles -->
+  <div class="bg-bubbles" aria-hidden="true">
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+  </div>
+
+  <!-- Confetti Canvas for Celebrations -->
+  <canvas id="confettiCanvas"></canvas>
+
+  <!-- =========================================================================
+       STICKY GAMIFICATION TOPBAR (HUD)
+       ========================================================================= -->
+  <header class="hud-bar">
+    <div class="hud-container">
+      <!-- Left: Logo & Student Profile -->
+      <div class="hud-left">
+        <a class="brand-logo" onclick="window.navigateToSection('beranda')" title="Kembali ke Beranda">
+          <span class="brand-icon">🍕</span>
+          <span>PecahanCeria</span>
+        </a>
+
+        <div class="profile-chip" id="btnOpenProfile" title="Klik untuk ganti nama & avatar">
+          <div class="profile-avatar">🐰</div>
+          <div class="profile-meta">
+            <span class="profile-name">Bintang Juara</span>
+            <span class="profile-level">Lv.1 - Penjelajah Pemula</span>
+          </div>
+          <span style="font-size: 0.75rem; color: #64748B;">✏️</span>
+        </div>
+      </div>
+
+      <!-- Middle: XP Bar & Hearts -->
+      <div class="hud-middle">
+        <div class="xp-container" title="Poin Pengalaman (XP)">
+          <div class="xp-badge">
+            <span>⭐</span>
+            <span class="xp-display-number">40 XP</span>
+          </div>
+          <div class="xp-bar-outer" title="Progres menuju level berikutnya">
+            <div class="xp-bar-inner"></div>
+          </div>
+        </div>
+
+        <div class="hearts-container" title="Nyawa Petualang">
+          <span class="heart">❤️</span>
+          <span class="heart">❤️</span>
+          <span class="heart">❤️</span>
+        </div>
+      </div>
+
+      <!-- Right: Action Buttons (Quests, Badges, Sound) -->
+      <div class="hud-right">
+        <button class="btn-hud" id="btnOpenQuests" title="Misi Belajar Hari Ini">
+          <span>📜 Misi</span>
+        </button>
+
+        <button class="btn-hud" id="btnOpenBadges" title="Koleksi Lencana Prestasimu">
+          <span>🏅 Lencana</span>
+          <span class="badge-counter">1</span>
+        </button>
+
+        <button class="btn-hud" id="btnSoundToggle" title="Nyalakan atau matikan suara">
+          🔊 <span>SUARA</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- =========================================================================
+       MAIN NAVIGATION BAR
+       ========================================================================= -->
+  <nav class="main-nav" aria-label="Navigasi Utama">
+    <div class="nav-container">
+      <a class="nav-link active" data-target="beranda" id="nav-beranda">
+        <span class="nav-icon">🏠</span>
+        <span>Beranda</span>
+      </a>
+      <a class="nav-link" data-target="cp-tp" id="nav-cptp">
+        <span class="nav-icon">🎯</span>
+        <span>CP & TP</span>
+      </a>
+      <a class="nav-link" data-target="materi" id="nav-materi">
+        <span class="nav-icon">🔬</span>
+        <span>Materi Interaktif</span>
+      </a>
+      <a class="nav-link" data-target="game" id="nav-game">
+        <span class="nav-icon">🎮</span>
+        <span>Game Seru</span>
+      </a>
+      <a class="nav-link" data-target="video" id="nav-video">
+        <span class="nav-icon">🎬</span>
+        <span>Video Belajar</span>
+      </a>
+      <a class="nav-link" data-target="kuis" id="nav-kuis">
+        <span class="nav-icon">🏆</span>
+        <span>Kuis Petualang</span>
+      </a>
+    </div>
+  </nav>
+
+  <!-- =========================================================================
+       MAIN CONTENT CONTAINER
+       ========================================================================= -->
+  <main class="main-content">
+
+    <!-- =======================================================================
+         SECTION 1: BERANDA (HOME)
+         ======================================================================= -->
+    <section id="beranda" class="page-section active">
+      <!-- Hero Banner -->
+      <div class="hero-banner-card">
+        <img src="assets/images/hero-banner.jpg" alt="Petualangan Pecahan Matematika Ceria Kelas 4 SD" class="hero-banner-img">
+        <div class="hero-content-overlay">
+          <div class="hero-text">
+            <div class="hero-tag">🌟 Kurikulum Merdeka - Matematika Fase B Kelas 4</div>
+            <h1 class="hero-title">Petualangan Belajar <span>Pecahan Jadi Seru!</span></h1>
+            <p class="hero-desc">
+              Selamat datang di dunia pecahan interaktif! Jelajahi konsep pecahan melalui potongan pizza lezat, balok cokelat, game dapur chef, tonton video seru, dan raih sertifikat prestasimu!
+            </p>
+            <div class="hero-actions">
+              <button class="btn btn-primary btn-lg" onclick="window.navigateToSection('materi')">
+                🚀 Mulai Belajar Sekarang
+              </button>
+              <button class="btn btn-amber btn-lg" onclick="window.navigateToSection('game')">
+                🍕 Main Game Dapur Pizza
+              </button>
+            </div>
+          </div>
+
+          <div class="hero-badge-preview">
+            <img src="assets/images/gold-medal.jpg" alt="Sertifikat Juara" class="hero-medal-img">
+            <div class="hero-medal-text">
+              <h4>Sertifikat Juara</h4>
+              <p>Selesaikan kuis untuk cetak sertifikat resmi digitalmu!</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Peta Petualangan Belajar (Learning Pathway) -->
+      <div class="pathway-section">
+        <div class="section-header">
+          <div class="section-pill">🗺️ Rute Belajar</div>
+          <h2 class="section-title">Peta Petualangan Matematika</h2>
+          <p class="section-subtitle">Ikuti alur petualangan dari pos pertama hingga pos ujian akhir kelulusan</p>
+        </div>
+
+        <div class="pathway-grid">
+          <!-- Step 1 -->
+          <div class="pathway-step step-1" onclick="window.navigateToSection('cp-tp')">
+            <div class="pathway-number">01</div>
+            <div class="pathway-icon">🎯</div>
+            <h3 class="pathway-title">Ketahui Target Belajar</h3>
+            <p class="pathway-desc">Pahami Capaian Pembelajaran (CP) dan Tujuan Pembelajaran (TP) pecahan kelas 4 SD.</p>
+            <div class="pathway-footer">
+              <span>Buka Panduan CP & TP ➡️</span>
+            </div>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="pathway-step step-2" onclick="window.navigateToSection('materi')">
+            <div class="pathway-number">02</div>
+            <div class="pathway-icon">🔬</div>
+            <h3 class="pathway-title">Laboratorium Visual</h3>
+            <p class="pathway-desc">Potong pizza, belah cokelat, uji dinding pecahan senilai, dan timbang pecahan secara live.</p>
+            <div class="pathway-footer">
+              <span>Eksplorasi Lab ➡️</span>
+              <span class="xp-tag">+50 XP</span>
+            </div>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="pathway-step step-3" onclick="window.navigateToSection('game')">
+            <div class="pathway-number">03</div>
+            <div class="pathway-icon">🎮</div>
+            <h3 class="pathway-title">Arena Game Edukasi</h3>
+            <p class="pathway-desc">Layani pesanan di Dapur Chef Pizza dan uji ketangkasan menangkap bintang pecahan.</p>
+            <div class="pathway-footer">
+              <span>Mainkan Game ➡️</span>
+              <span class="xp-tag">+60 XP</span>
+            </div>
+          </div>
+
+          <!-- Step 4 -->
+          <div class="pathway-step step-4" onclick="window.navigateToSection('kuis')">
+            <div class="pathway-number">04</div>
+            <div class="pathway-icon">🏆</div>
+            <h3 class="pathway-title">Kuis & Sertifikat</h3>
+            <p class="pathway-desc">Tuntaskan 10 soal tantangan, buktikan kemampuanmu, dan cetak sertifikat kelulusan!</p>
+            <div class="pathway-footer">
+              <span>Ujian Akhir ➡️</span>
+              <span class="xp-tag">+100 XP</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Student Stats Overview Card -->
+      <div class="stats-summary-card">
+        <div class="stat-item">
+          <div class="stat-icon">⭐</div>
+          <div>
+            <div class="stat-number" id="statTotalXp">40</div>
+            <div class="stat-label">Total Skor Pengalaman (XP)</div>
+          </div>
+        </div>
+
+        <div class="stat-item">
+          <div class="stat-icon">🏅</div>
+          <div>
+            <div class="stat-number" id="statTotalBadges">1</div>
+            <div class="stat-label">Lencana Terkumpul</div>
+          </div>
+        </div>
+
+        <div class="stat-item">
+          <div class="stat-icon">🍕</div>
+          <div>
+            <div class="stat-number" id="statPizzaOrders">0</div>
+            <div class="stat-label">Pesanan Pizza Disajikan</div>
+          </div>
+        </div>
+
+        <div class="stat-item">
+          <div class="stat-icon">📝</div>
+          <div>
+            <div class="stat-number" id="statQuizBest">0%</div>
+            <div class="stat-label">Nilai Terbaik Kuis</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Feature Highlights -->
+      <div class="features-grid">
+        <div class="feature-box">
+          <div class="feature-icon-wrapper">🍕</div>
+          <div class="feature-text">
+            <h3>Visual & Manipulatif Konkret</h3>
+            <p>Membantu anak memahami konsep pecahan secara nyata menggunakan ilustrasi pizza berputar, grid cokelat, dan timbangan.</p>
+          </div>
+        </div>
+
+        <div class="feature-box">
+          <div class="feature-icon-wrapper">🕹️</div>
+          <div class="feature-text">
+            <h3>Gamifikasi Ramah Anak</h3>
+            <p>Lengkap dengan avatar imut, sistem poin XP, kenaikan level, sistem nyawa, efek suara ceria, dan taburan konfeti.</p>
+          </div>
+        </div>
+
+        <div class="feature-box">
+          <div class="feature-icon-wrapper">🖨️</div>
+          <div class="feature-text">
+            <h3>Sertifikat Prestasi Siap Cetak</h3>
+            <p>Beri apresiasi nyata pada siswa dengan sertifikat resmi berwarna berbingkai emas yang dapat diunduh atau langsung dicetak.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- =======================================================================
+         SECTION 2: CP & TP (KURIKULUM MERDEKA)
+         ======================================================================= -->
+    <section id="cp-tp" class="page-section">
+      <div class="section-header">
+        <div class="section-pill">📘 Kurikulum Merdeka</div>
+        <h2 class="section-title">Capaian & Tujuan Pembelajaran</h2>
+        <p class="section-subtitle">Panduan kompetensi matematika Fase B (Kelas 4 SD) pada materi pecahan</p>
+      </div>
+
+      <!-- CP Hero Card -->
+      <div class="cp-hero-card">
+        <div class="cp-badge-header">
+          <span>🏛️</span>
+          <span>Fase B - Kelas IV SD | Elemen: Bilangan</span>
+        </div>
+        <h3 class="cp-title">Capaian Pembelajaran (CP)</h3>
+        <p class="cp-statement">
+          "Pada akhir Fase B, peserta didik dapat <strong>mengenali pecahan senilai</strong> menggunakan gambar dan simbol matematika, <strong>membandingkan dan mengurutkan</strong> antar-pecahan dengan penyebut sama dan berbeda sederhana, serta menyelesaikan <strong>operasi penjumlahan dan pengurangan pecahan berpenyebut sama</strong> dalam konteks kehidupan sehari-hari."
+        </p>
+      </div>
+
+      <!-- TP List Cards -->
+      <div class="tp-container">
+        <!-- TP 1 -->
+        <div class="tp-card">
+          <div class="tp-header">
+            <span class="tp-badge-tag">Tujuan Pembelajaran 1 (TP 1)</span>
+            <span class="xp-tag">Level Konsep Dasar</span>
+          </div>
+          <h4 class="tp-target-text">
+            Memahami arti pecahan sebagai bagian dari keseluruhan atau benda konkret serta menentukan pembilang dan penyebut.
+          </h4>
+          <div class="iktp-checklist">
+            <h4>📋 Indikator Ketercapaian (IKTP) - Ceklis Pemahamanmu:</h4>
+            <label class="iktp-item">
+              <input type="checkbox" class="iktp-checkbox" onchange="this.parentElement.classList.toggle('checked')">
+              <span>Siswa mampu menyebutkan arti angka pembilang (bagian atas) dan angka penyebut (bagian bawah).</span>
+            </label>
+            <label class="iktp-item">
+              <input type="checkbox" class="iktp-checkbox" onchange="this.parentElement.classList.toggle('checked')">
+              <span>Siswa mampu merepresentasikan pecahan 1/2, 1/3, 1/4, 3/4 ke dalam bentuk arsiran gambar konkret.</span>
+            </label>
+          </div>
+          <div>
+            <button class="btn btn-outline" onclick="window.navigateToSection('materi'); window.materiManager.bindTabs(); document.querySelector('[data-tab=tabKonsep]').click();">
+              🔬 Buka Lab Visual Konsep Dasar ➡️
+            </button>
+          </div>
+        </div>
+
+        <!-- TP 2 -->
+        <div class="tp-card">
+          <div class="tp-header">
+            <span class="tp-badge-tag">Tujuan Pembelajaran 2 (TP 2)</span>
+            <span class="xp-tag">Level Penalaran</span>
+          </div>
+          <h4 class="tp-target-text">
+            Menentukan dan membuktikan kesetaraan pecahan senilai menggunakan representasi visual manipulatif (dinding pecahan dan perkalian).
+          </h4>
+          <div class="iktp-checklist">
+            <h4>📋 Indikator Ketercapaian (IKTP) - Ceklis Pemahamanmu:</h4>
+            <label class="iktp-item">
+              <input type="checkbox" class="iktp-checkbox" onchange="this.parentElement.classList.toggle('checked')">
+              <span>Siswa mampu menemukan pecahan yang senilai dengan pecahan lain (misal: 1/2 = 2/4 = 4/8).</span>
+            </label>
+            <label class="iktp-item">
+              <input type="checkbox" class="iktp-checkbox" onchange="this.parentElement.classList.toggle('checked')">
+              <span>Siswa mampu mengalikan pembilang dan penyebut dengan angka yang sama untuk mencari pecahan senilai.</span>
+            </label>
+          </div>
+          <div>
+            <button class="btn btn-outline" onclick="window.navigateToSection('materi'); document.querySelector('[data-tab=tabSenilai]').click();">
+              🧱 Buka Dinding Pecahan Senilai ➡️
+            </button>
+          </div>
+        </div>
+
+        <!-- TP 3 -->
+        <div class="tp-card">
+          <div class="tp-header">
+            <span class="tp-badge-tag">Tujuan Pembelajaran 3 (TP 3)</span>
+            <span class="xp-tag">Level Analisis</span>
+          </div>
+          <h4 class="tp-target-text">
+            Membandingkan dua pecahan menggunakan tanda (&gt;, &lt;, =) dan mengurutkan deretan pecahan dari terkecil ke terbesar atau sebaliknya.
+          </h4>
+          <div class="iktp-checklist">
+            <h4>📋 Indikator Ketercapaian (IKTP) - Ceklis Pemahamanmu:</h4>
+            <label class="iktp-item">
+              <input type="checkbox" class="iktp-checkbox" onchange="this.parentElement.classList.toggle('checked')">
+              <span>Siswa mampu membandingkan pecahan berpenyebut sama dengan melihat angka pembilangnya.</span>
+            </label>
+            <label class="iktp-item">
+              <input type="checkbox" class="iktp-checkbox" onchange="this.parentElement.classList.toggle('checked')">
+              <span>Siswa mampu mengurutkan 3 sampai 4 pecahan berpenyebut sama dengan benar.</span>
+            </label>
+          </div>
+          <div>
+            <button class="btn btn-outline" onclick="window.navigateToSection('materi'); document.querySelector('[data-tab=tabBandingkan]').click();">
+              ⚖️ Buka Timbangan Perbandingan ➡️
+            </button>
+          </div>
+        </div>
+
+        <!-- TP 4 -->
+        <div class="tp-card">
+          <div class="tp-header">
+            <span class="tp-badge-tag">Tujuan Pembelajaran 4 (TP 4)</span>
+            <span class="xp-tag">Level Operasi & Aplikasi</span>
+          </div>
+          <h4 class="tp-target-text">
+            Menyelesaikan operasi hitung penjumlahan dan pengurangan pecahan berpenyebut sama dalam pemecahan masalah kontekstual sehari-hari.
+          </h4>
+          <div class="iktp-checklist">
+            <h4>📋 Indikator Ketercapaian (IKTP) - Ceklis Pemahamanmu:</h4>
+            <label class="iktp-item">
+              <input type="checkbox" class="iktp-checkbox" onchange="this.parentElement.classList.toggle('checked')">
+              <span>Siswa memahami bahwa yang dijumlahkan/dikurangkan HANYA pembilangnya, sedangkan penyebut tetap.</span>
+            </label>
+            <label class="iktp-item">
+              <input type="checkbox" class="iktp-checkbox" onchange="this.parentElement.classList.toggle('checked')">
+              <span>Siswa mampu menyelesaikan soal cerita pembagian kue, pizza, atau buah secara matematis.</span>
+            </label>
+          </div>
+          <div>
+            <button class="btn btn-outline" onclick="window.navigateToSection('materi'); document.querySelector('[data-tab=tabOperasi]').click();">
+              ➕ Buka Lab Operasi Hitung ➡️
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Profil Pelajar Pancasila -->
+      <div class="pancasila-card">
+        <h3>🇮🇩 Penguatan Profil Pelajar Pancasila</h3>
+        <div class="pancasila-grid">
+          <div class="pancasila-item">
+            <strong>1. Bernalar Kritis</strong>
+            <p>Menganalisis perbandingan pecahan, membedakan ukuran bagian, dan membuktikan kesetaraan nilai pecahan.</p>
+          </div>
+          <div class="pancasila-item">
+            <strong>2. Mandiri</strong>
+            <p>Melatih rasa percaya diri melalui eksplorasi mandiri di laboratorium visual, mini-game, dan kuis interaktif.</p>
+          </div>
+          <div class="pancasila-item">
+            <strong>3. Gotong Royong & Berbagi</strong>
+            <p>Memahami makna pecahan sebagai konsep adil dalam berbagi makanan atau benda kepada teman dan keluarga.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- =======================================================================
+         SECTION 3: MATERI INTERAKTIF (LABORATORIUM PECAHAN)
+         ======================================================================= -->
+    <section id="materi" class="page-section">
+      <div class="section-header">
+        <div class="section-pill">🔬 Laboratorium Pecahan</div>
+        <h2 class="section-title">Eksplorasi Konsep Pecahan</h2>
+        <p class="section-subtitle">Sentuh, geser, dan amati perubahan pecahan secara langsung melalui media visual interaktif</p>
+      </div>
+
+      <!-- Navigation Tabs for Materi -->
+      <div class="materi-tabs">
+        <button class="materi-tab-btn active" data-tab="tabKonsep">
+          <span>🍕</span> 1. Konsep Dasar Pecahan
+        </button>
+        <button class="materi-tab-btn" data-tab="tabSenilai">
+          <span>🧱</span> 2. Pecahan Senilai
+        </button>
+        <button class="materi-tab-btn" data-tab="tabBandingkan">
+          <span>⚖️</span> 3. Membandingkan Pecahan
+        </button>
+        <button class="materi-tab-btn" data-tab="tabOperasi">
+          <span>➕</span> 4. Penjumlahan & Pengurangan
+        </button>
+      </div>
+
+      <!-- TAB 1: KONSEP DASAR (PIZZA & CHOCOLATE) -->
+      <div id="tabKonsep" class="materi-content-panel active">
+        <div class="lab-grid">
+          <!-- Left: Pizza Manipulative -->
+          <div class="lab-panel">
+            <h3 class="lab-panel-title"><span>🍕</span> Pizza Pemotong Pecahan</h3>
+            <p style="font-size: 0.92rem; color: #64748B; margin-bottom: 1.25rem;">
+              Geser slider pembilang dan penyebut di bawah, atau langsung klik potongan pizza!
+            </p>
+
+            <div class="pizza-viz-box">
+              <div id="pizzaSvgContainer"></div>
+              <div style="margin-top: 1rem; text-align: center;">
+                <div class="fraction-big-display">
+                  <span class="fraction-num" id="dispPizzaNum">3</span>
+                  <span class="fraction-den" id="dispPizzaDen">8</span>
+                </div>
+              </div>
+            </div>
+
+            <div id="pizzaDescText" style="text-align: center; margin: 1rem 0; font-size: 1rem; color: #1E293B;">
+              Kamu memilih 3 dari 8 potongan pizza.
+            </div>
+
+            <!-- Sliders -->
+            <div class="slider-control-group">
+              <div class="slider-label">
+                <span>Pembilang (Potongan Diambil):</span>
+                <span class="value-badge" id="pizzaNumValue">3</span>
+              </div>
+              <input type="range" class="custom-range" id="pizzaNumSlider" min="1" max="8" value="3">
+            </div>
+
+            <div class="slider-control-group">
+              <div class="slider-label">
+                <span>Penyebut (Total Seluruh Potongan):</span>
+                <span class="value-badge" id="pizzaDenValue">8</span>
+              </div>
+              <input type="range" class="custom-range" id="pizzaDenSlider" min="2" max="12" value="8">
+            </div>
+          </div>
+
+          <!-- Right: Chocolate Bar & Explanations -->
+          <div class="lab-panel">
+            <h3 class="lab-panel-title"><span>🍫</span> Balok Cokelat Interaktif</h3>
+            <p style="font-size: 0.92rem; color: #64748B; margin-bottom: 1rem;">
+              Klik petak cokelat untuk "memakannya". Amati pecahan sisa cokelat yang tersisa!
+            </p>
+
+            <div style="display: flex; gap: 0.5rem; justify-content: center; margin-bottom: 1rem;">
+              <button class="btn btn-outline" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;" onclick="window.materiManager.setChocolateTotal(6)">Bagi 6</button>
+              <button class="btn btn-outline" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;" onclick="window.materiManager.setChocolateTotal(8)">Bagi 8</button>
+              <button class="btn btn-outline" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;" onclick="window.materiManager.setChocolateTotal(10)">Bagi 10</button>
+              <button class="btn btn-outline" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;" onclick="window.materiManager.setChocolateTotal(12)">Bagi 12</button>
+            </div>
+
+            <div class="choc-viz-box">
+              <div class="choc-bar-grid" id="chocBarGrid"></div>
+              <div style="margin-top: 1rem;">
+                <div class="fraction-big-display">
+                  <span class="fraction-num" id="chocNum">5</span>
+                  <span class="fraction-den" id="chocDen">8</span>
+                </div>
+              </div>
+            </div>
+
+            <div id="chocInfo" style="text-align: center; margin: 1rem 0; font-size: 0.95rem; color: #78350F;">
+              Sisa cokelat: 5/8 bagian.
+            </div>
+
+            <div style="background: #F0FDF4; border: 1.5px solid #86EFAC; border-radius: 12px; padding: 1rem; margin-top: 1rem;">
+              <h4 style="font-family: var(--font-display); color: #065F46; font-size: 1rem; margin-bottom: 0.25rem;">
+                💡 Kunci Penting Pecahan:
+              </h4>
+              <p style="font-size: 0.88rem; color: #166534;">
+                • <strong>PEMBILANG (atas)</strong>: Menyatakan jumlah bagian yang kita bicarakan atau diambil.<br>
+                • <strong>PENYEBUT (bawah)</strong>: Menyatakan jumlah seluruh bagian utuh yang sama besar.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 2: PECAHAN SENILAI -->
+      <div id="tabSenilai" class="materi-content-panel">
+        <div class="card-glass" style="margin-bottom: 2rem;">
+          <h3 style="font-family: var(--font-display); font-size: 1.4rem; color: var(--primary-700); margin-bottom: 0.5rem;">
+            🧱 Dinding Pecahan Ajaib (Fraction Wall)
+          </h3>
+          <p style="color: #64748B; margin-bottom: 1.25rem;">
+            Klik salah satu balok pecahan di bawah ini untuk melihat balok lain yang memiliki panjang sama persis!
+          </p>
+
+          <div class="fraction-wall-container">
+            <!-- Row 1: 1 Utuh -->
+            <div class="wall-row row-1">
+              <div class="wall-block" data-value="1.0" data-frac="1/1">1 Utuh (1/1)</div>
+            </div>
+            <!-- Row 2: 1/2 -->
+            <div class="wall-row row-2">
+              <div class="wall-block" data-value="0.5" data-frac="1/2">1/2</div>
+              <div class="wall-block" data-value="0.5" data-frac="1/2">1/2</div>
+            </div>
+            <!-- Row 3: 1/3 -->
+            <div class="wall-row row-3">
+              <div class="wall-block" data-value="0.333" data-frac="1/3">1/3</div>
+              <div class="wall-block" data-value="0.333" data-frac="1/3">1/3</div>
+              <div class="wall-block" data-value="0.333" data-frac="1/3">1/3</div>
+            </div>
+            <!-- Row 4: 1/4 -->
+            <div class="wall-row row-4">
+              <div class="wall-block" data-value="0.25" data-frac="1/4">1/4</div>
+              <div class="wall-block" data-value="0.25" data-frac="1/4">1/4</div>
+              <div class="wall-block" data-value="0.25" data-frac="1/4">1/4</div>
+              <div class="wall-block" data-value="0.25" data-frac="1/4">1/4</div>
+            </div>
+            <!-- Row 6: 1/6 -->
+            <div class="wall-row row-6">
+              <div class="wall-block" data-value="0.166" data-frac="1/6">1/6</div>
+              <div class="wall-block" data-value="0.166" data-frac="1/6">1/6</div>
+              <div class="wall-block" data-value="0.166" data-frac="1/6">1/6</div>
+              <div class="wall-block" data-value="0.166" data-frac="1/6">1/6</div>
+              <div class="wall-block" data-value="0.166" data-frac="1/6">1/6</div>
+              <div class="wall-block" data-value="0.166" data-frac="1/6">1/6</div>
+            </div>
+            <!-- Row 8: 1/8 -->
+            <div class="wall-row row-8">
+              <div class="wall-block" data-value="0.125" data-frac="1/8">1/8</div>
+              <div class="wall-block" data-value="0.125" data-frac="1/8">1/8</div>
+              <div class="wall-block" data-value="0.125" data-frac="1/8">1/8</div>
+              <div class="wall-block" data-value="0.125" data-frac="1/8">1/8</div>
+              <div class="wall-block" data-value="0.125" data-frac="1/8">1/8</div>
+              <div class="wall-block" data-value="0.125" data-frac="1/8">1/8</div>
+              <div class="wall-block" data-value="0.125" data-frac="1/8">1/8</div>
+              <div class="wall-block" data-value="0.125" data-frac="1/8">1/8</div>
+            </div>
+          </div>
+
+          <div id="wallEquivResult" style="margin-top: 1.5rem; text-align: center; background: #EEF2FF; border-radius: 12px; padding: 1.25rem;">
+            <p style="font-size: 1.05rem; color: #4338CA;">
+              👆 Klik salah satu balok pecahan di atas untuk melihat pembuktian kesetaraannya!
+            </p>
+          </div>
+        </div>
+
+        <!-- Formula explanation box -->
+        <div style="background: #FFFBEB; border: 2px solid #FCD34D; border-radius: 16px; padding: 1.5rem; text-align: center;">
+          <h4 style="font-family: var(--font-display); font-size: 1.25rem; color: #92400E; margin-bottom: 0.5rem;">
+            ✨ Rahasia Menemukan Pecahan Senilai
+          </h4>
+          <p style="font-size: 1.05rem; color: #78350F; max-width: 700px; margin: 0 auto;">
+            Untuk mendapatkan pecahan senilai, kita cukup <strong>MENGALIKAN</strong> atau <strong>MEMBAGI</strong> pembilang dan penyebut dengan angka yang sama (selain nol).
+          </p>
+          <div style="margin-top: 1rem; display: inline-flex; align-items: center; gap: 1rem; background: #fff; padding: 0.75rem 1.5rem; border-radius: 12px; border: 2px dashed #F59E0B; font-size: 1.25rem; font-weight: 700;">
+            <span>1/2</span>
+            <span>× 2/2 =</span>
+            <span style="color: #4F46E5;">2/4</span>
+            <span>× 2/2 =</span>
+            <span style="color: #10B981;">4/8</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 3: MEMBANDINGKAN PECAHAN -->
+      <div id="tabBandingkan" class="materi-content-panel">
+        <div class="lab-grid">
+          <!-- Balance Scale -->
+          <div class="lab-panel">
+            <h3 class="lab-panel-title"><span>⚖️</span> Timbangan Pecahan Ajaib</h3>
+            <p style="font-size: 0.92rem; color: #64748B; margin-bottom: 1.5rem;">
+              Pecahan yang nilainya lebih besar akan turun ke bawah karena lebih "berat/banyak".
+            </p>
+
+            <div class="scale-wrapper">
+              <div class="scale-beam-container" id="scaleBeam">
+                <div class="scale-sign-bubble" id="scaleSign">=</div>
+                <div class="scale-beam">
+                  <div class="scale-pan scale-pan-left">
+                    <span style="font-size: 0.75rem; color: #64748B;">Pecahan A</span>
+                    <strong style="font-size: 1.4rem; color: #4F46E5;" id="dispScaleLeft">1/2</strong>
+                  </div>
+                  <div class="scale-pan scale-pan-right">
+                    <span style="font-size: 0.75rem; color: #64748B;">Pecahan B</span>
+                    <strong style="font-size: 1.4rem; color: #10B981;" id="dispScaleRight">2/4</strong>
+                  </div>
+                </div>
+              </div>
+              <div class="scale-pivot"></div>
+            </div>
+
+            <div id="scaleExplanation" style="margin-top: 1.5rem;"></div>
+          </div>
+
+          <!-- Selectors and Rules -->
+          <div class="lab-panel">
+            <h3 class="lab-panel-title"><span>🎛️</span> Pilih Pecahan untuk Dibandingkan</h3>
+
+            <div style="display: flex; gap: 1.5rem; margin-bottom: 1.5rem;">
+              <div style="flex: 1;">
+                <label style="font-family: var(--font-display); font-weight: 700; color: #4F46E5; display: block; margin-bottom: 0.4rem;">
+                  Pecahan Kiri (A):
+                </label>
+                <select id="scaleLeftSelect" style="width: 100%; padding: 0.75rem; border-radius: 10px; border: 2px solid #CBD5E1; font-family: var(--font-display); font-size: 1.1rem;">
+                  <option value="1/2" selected>1/2</option>
+                  <option value="1/4">1/4</option>
+                  <option value="2/4">2/4</option>
+                  <option value="3/4">3/4</option>
+                  <option value="1/3">1/3</option>
+                  <option value="2/3">2/3</option>
+                  <option value="3/8">3/8</option>
+                  <option value="5/8">5/8</option>
+                  <option value="7/8">7/8</option>
+                </select>
+              </div>
+
+              <div style="flex: 1;">
+                <label style="font-family: var(--font-display); font-weight: 700; color: #10B981; display: block; margin-bottom: 0.4rem;">
+                  Pecahan Kanan (B):
+                </label>
+                <select id="scaleRightSelect" style="width: 100%; padding: 0.75rem; border-radius: 10px; border: 2px solid #CBD5E1; font-family: var(--font-display); font-size: 1.1rem;">
+                  <option value="1/2">1/2</option>
+                  <option value="1/4">1/4</option>
+                  <option value="2/4" selected>2/4</option>
+                  <option value="3/4">3/4</option>
+                  <option value="1/3">1/3</option>
+                  <option value="2/3">2/3</option>
+                  <option value="3/8">3/8</option>
+                  <option value="5/8">5/8</option>
+                  <option value="7/8">7/8</option>
+                </select>
+              </div>
+            </div>
+
+            <div style="background: #F8FAFC; border: 2px solid #E2E8F0; border-radius: 12px; padding: 1.25rem;">
+              <h4 style="font-family: var(--font-display); color: var(--neutral-800); margin-bottom: 0.5rem;">
+                📌 Aturan Praktis Kelas 4:
+              </h4>
+              <ul style="font-size: 0.95rem; color: #475569; padding-left: 1.25rem; line-height: 1.7;">
+                <li><strong>Jika penyebut sama:</strong> Cukup lihat pembilangnya! Pembilang yang lebih besar nilainya lebih besar. (Contoh: 5/8 &gt; 3/8).</li>
+                <li><strong>Jika pembilang sama:</strong> Semakin besar penyebutnya, potongannya semakin kecil! (Contoh: 1/2 &gt; 1/4).</li>
+                <li><strong>Trik Kali Silang:</strong> Kalikan pembilang kiri dengan penyebut kanan, lalu bandingkan hasilnya!</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 4: OPERASI HITUNG PENYEBUT SAMA -->
+      <div id="tabOperasi" class="materi-content-panel">
+        <div class="card-glass" style="max-width: 850px; margin: 0 auto;">
+          <div style="display: flex; justify-content: center; gap: 1rem; margin-bottom: 1.5rem;">
+            <button class="btn btn-primary active" id="opBtnAdd" onclick="window.materiManager.setOperationType('add')">
+              ➕ Penjumlahan Pecahan
+            </button>
+            <button class="btn btn-outline" id="opBtnSub" onclick="window.materiManager.setOperationType('sub')">
+              ➖ Pengurangan Pecahan
+            </button>
+          </div>
+
+          <!-- Formula Math Expression -->
+          <div style="display: flex; align-items: center; justify-content: center; gap: 1rem; font-size: 1.8rem; font-family: var(--font-display); margin-bottom: 2rem;">
+            <div class="fraction-big-display">
+              <span class="fraction-num" id="opF1Num">2</span>
+              <span class="fraction-den" id="opF1Den">6</span>
+            </div>
+            <span id="opSymbol" style="color: #4F46E5; font-weight: 700;">+</span>
+            <div class="fraction-big-display">
+              <span class="fraction-num" id="opF2Num">3</span>
+              <span class="fraction-den" id="opF2Den">6</span>
+            </div>
+            <span style="font-weight: 700;">=</span>
+            <div class="fraction-big-display" style="background: #EEF2FF; padding: 4px 12px; border-radius: 12px; border: 2px dashed #4F46E5;">
+              <span class="fraction-num" id="opResultNum">5</span>
+              <span class="fraction-den" id="opResultDen">6</span>
+            </div>
+          </div>
+
+          <!-- Live Visual Strips -->
+          <div id="opVisualBox" style="background: #F8FAFC; border: 2px dashed #CBD5E1; border-radius: 16px; padding: 1.5rem; margin-bottom: 1.5rem;"></div>
+
+          <!-- Controls -->
+          <div style="display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
+            <button class="btn btn-outline" onclick="window.materiManager.changeOpValue('num1', 1)">
+              Ubah Bagian 1 (+1)
+            </button>
+            <button class="btn btn-outline" onclick="window.materiManager.changeOpValue('num2', 1)">
+              Ubah Bagian 2 (+1)
+            </button>
+            <button class="btn btn-outline" onclick="window.materiManager.changeOpValue('den', 1)">
+              Ganti Penyebut (Potongan)
+            </button>
+          </div>
+
+          <div style="background: #ECFDF5; border: 1.5px solid #6EE7B7; border-radius: 12px; padding: 1rem; margin-top: 1.5rem; text-align: center;">
+            <p style="color: #065F46; font-size: 0.95rem; font-weight: 600;">
+              ✨ Ingat Rumus Emas: Karena penyebutnya sudah sama, jumlahkan atau kurangkan HANYA pembilangnya saja. Penyebutnya tetap tidak berubah!
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- =======================================================================
+         SECTION 4: GAME EDUKASI (ARENA BERMAIN & BERLATIH)
+         ======================================================================= -->
+    <section id="game" class="page-section">
+      <div class="section-header">
+        <div class="section-pill">🎮 Arena Game Matematika</div>
+        <h2 class="section-title">Bermain Sambil Mengasah Otak</h2>
+        <p class="section-subtitle">Pilih permainan seru di bawah ini dan kumpulkan poin pengalaman (XP) sebanyak-banyaknya!</p>
+      </div>
+
+      <!-- Game Selector Tabs -->
+      <div class="game-selector-tabs">
+        <button class="game-tab-btn active" id="tabGamePizza">
+          <span>🍕</span> Game 1: Dapur Chef Pizza
+        </button>
+        <button class="game-tab-btn" id="tabGameCatch">
+          <span>⭐</span> Game 2: Tangkap Bintang Pecahan
+        </button>
+      </div>
+
+      <!-- GAME 1: DAPUR CHEF PIZZA -->
+      <div id="gameViewPizza" class="game-view active">
+        <div class="pizza-game-card">
+          <!-- Game HUD -->
+          <div class="game-hud">
+            <div>Restoran: <span style="color: #D97706;">Dapur Pecahan Ceria</span></div>
+            <div id="pizzaRoundTag" style="color: #4F46E5;">Pesanan 1 dari 3</div>
+            <div class="xp-tag">+40 XP per Pesanan</div>
+          </div>
+
+          <!-- Customer dialogue -->
+          <div class="customer-bubble-card">
+            <div class="customer-avatar" id="pizzaCustomerAvatar">🐰</div>
+            <div class="speech-bubble">
+              <h4 id="pizzaCustomerName">Roro si Kelinci</h4>
+              <p id="pizzaCustomerDialogue">"Halo Chef! Tolong buatkan pizza dengan 3/8 bagian topping jamur ya!"</p>
+              <div style="margin-top: 0.5rem; font-weight: 700; color: #D97706;" id="pizzaOrderFractionTag">
+                Target: 3/8 (🍄 Jamur Lezat)
+              </div>
+            </div>
+          </div>
+
+          <!-- Feedback message -->
+          <div id="pizzaFeedbackMsg" style="display: none; padding: 1rem; border-radius: 12px; margin-bottom: 1.5rem; text-align: center; font-weight: 700;"></div>
+
+          <!-- Pizza workspace -->
+          <div class="pizza-kitchen-workspace" id="pizzaKitchenWorkspace">
+            <!-- Loyang denominator selector -->
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+              <span style="font-size: 0.95rem; font-weight: 700; color: #475569;">Pilihan Loyang:</span>
+              <button class="btn btn-outline" style="padding: 0.35rem 0.75rem; font-size: 0.85rem;" onclick="window.pizzaGame.changeDenominator(4)">Loyang 4 Potong</button>
+              <button class="btn btn-outline" style="padding: 0.35rem 0.75rem; font-size: 0.85rem;" onclick="window.pizzaGame.changeDenominator(6)">Loyang 6 Potong</button>
+              <button class="btn btn-outline" style="padding: 0.35rem 0.75rem; font-size: 0.85rem;" onclick="window.pizzaGame.changeDenominator(8)">Loyang 8 Potong</button>
+            </div>
+
+            <div id="pizzaSelectedCountLabel" style="font-family: var(--font-display); font-size: 1.05rem;">
+              Topping terpasang: 0/8 bagian.
+            </div>
+
+            <!-- Slices to click -->
+            <div class="pizza-slices-interactive" id="pizzaSlicesInteractive"></div>
+
+            <p style="font-size: 0.85rem; color: #64748B;">
+              💡 Klik tiap potongan pizza untuk memberi atau mencabut topping lezat!
+            </p>
+
+            <button class="btn btn-success btn-lg" onclick="window.pizzaGame.servePizza()">
+              🍽️ Sajikan Pizza ke Pelanggan!
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- GAME 2: TANGKAP BINTANG PECAHAN (ARCADE) -->
+      <div id="gameViewCatch" class="game-view">
+        <div class="catcher-game-container">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem;">
+            <h3 style="font-family: var(--font-display); font-size: 1.3rem; color: #FDE047;" id="catcherTargetDisplay">
+              ⭐ Cari Pecahan Senilai dengan: 1/2
+            </h3>
+            <button class="btn btn-amber" id="btnStartCatcher" onclick="window.catcherGame.startGame()">
+              ▶️ Mulai Main
+            </button>
+          </div>
+
+          <div class="arcade-canvas-box">
+            <canvas id="gameCanvas"></canvas>
+          </div>
+
+          <div class="arcade-controls-touch">
+            <button class="arcade-btn" id="btnArcadeLeft">⬅️ Geser Kiri</button>
+            <button class="arcade-btn" id="btnArcadeRight">Geser Kanan ➡️</button>
+          </div>
+
+          <p style="font-size: 0.85rem; color: #94A3B8; text-align: center; margin-top: 0.75rem;">
+            🎮 Kontrol: Gunakan tombol keyboard <strong>Panah Kiri / Kanan (atau A / D)</strong>, sentuhan layar, atau geser mouse untuk menggerakkan keranjang!
+          </p>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- =======================================================================
+         SECTION 5: VIDEO PEMBELAJARAN
+         ======================================================================= -->
+    <section id="video" class="page-section">
+      <div class="section-header">
+        <div class="section-pill">🎬 Bioskop Belajar</div>
+        <h2 class="section-title">Video Animasi Matematika</h2>
+        <p class="section-subtitle">Tonton materi penjelasan animasi yang menyenangkan, lengkapi catatan, dan raih poin kuis kilat!</p>
+      </div>
+
+      <div class="video-hub-grid">
+        <!-- Left: Video Player & Checkpoint -->
+        <div>
+          <div class="video-player-card">
+            <div class="video-responsive-wrap">
+              <iframe id="mainVideoIframe" src="https://www.youtube-nocookie.com/embed/6iQe2W_9Wk4" title="Video Pembelajaran Matematika Pecahan Kelas 4 SD" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+
+            <div class="video-meta-body">
+              <div class="video-badge-group">
+                <span class="tp-badge-tag" id="activeVideoBadge">TP 1 - Konsep Dasar</span>
+                <span class="xp-tag">Bonus Tersedia</span>
+              </div>
+              <h3 class="video-title-active" id="activeVideoTitle">1. Petualangan Mengenal Konsep Pecahan</h3>
+
+              <div class="video-summary-box">
+                <h4>📝 Rangkuman Inti Video:</h4>
+                <p id="activeVideoSummary">
+                  Pecahan adalah bagian dari satu benda utuh yang dibagi menjadi bagian-bagian yang sama besar. Angka di atas disebut PEMBILANG dan angka di bawah disebut PENYEBUT.
+                </p>
+              </div>
+
+              <!-- Interactive Checkpoint Quiz -->
+              <div class="video-checkpoint-card" id="videoCheckpointBox"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Playlist & Student Notes -->
+        <div>
+          <div class="video-playlist-card">
+            <div class="playlist-header">
+              <span>Daftar Video Materi</span>
+              <span style="font-size: 0.8rem; color: #64748B;">4 Episode</span>
+            </div>
+            <div id="videoPlaylistItems"></div>
+
+            <!-- Notes Taker Area -->
+            <div style="margin-top: 1.5rem; border-top: 2px solid var(--neutral-100); padding-top: 1rem;">
+              <h4 style="font-family: var(--font-display); font-size: 1.05rem; color: var(--neutral-800); margin-bottom: 0.4rem; display: flex; align-items: center; gap: 0.4rem;">
+                ✏️ Buku Catatan Siswa
+              </h4>
+              <p style="font-size: 0.8rem; color: #64748B; margin-bottom: 0.5rem;">
+                Catat hal penting dari video di sini. Catatanmu tersimpan otomatis!
+              </p>
+              <textarea id="studentNotesArea" style="width: 100%; height: 110px; border-radius: 10px; border: 2px solid #CBD5E1; padding: 0.75rem; font-family: var(--font-body); font-size: 0.9rem; outline: none;" placeholder="Tuliskan rumus atau catatan pecahanmu di sini..."></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- =======================================================================
+         SECTION 6: KUIS GAMIFIKASI & SERTIFIKAT
+         ======================================================================= -->
+    <section id="kuis" class="page-section">
+      <div class="section-header">
+        <div class="section-pill">🏆 Ujian Kelulusan</div>
+        <h2 class="section-title">Kuis Petualang Pecahan</h2>
+        <p class="section-subtitle">Tuntaskan 10 soal tantangan untuk membuktikan pemahamanmu dan raih Sertifikat Resmi Digital!</p>
+      </div>
+
+      <div class="quiz-container">
+        <!-- Active Quiz Question Card -->
+        <div class="quiz-card" id="quizActiveCard">
+          <div class="quiz-top-bar">
+            <div class="quiz-step-indicator" id="quizStepLabel">Soal 1 dari 10</div>
+            <div style="display: flex; align-items: center; gap: 0.6rem;">
+              <span style="font-size: 0.85rem; font-weight: 700; color: #64748B;">Nyawa Kuis:</span>
+              <span id="quizHeartsContainer" style="font-size: 1.2rem;">❤️❤️❤️</span>
+            </div>
+          </div>
+
+          <div class="quiz-progress-bar">
+            <div class="quiz-progress-fill" id="quizProgressFill"></div>
+          </div>
+
+          <h3 class="question-prompt" id="quizQuestionPrompt">Loading soal...</h3>
+
+          <div class="question-visual-box" id="quizVisualBox"></div>
+
+          <div class="options-grid" id="quizOptionsGrid"></div>
+
+          <!-- Immediate Feedback Explanation Box -->
+          <div class="quiz-explanation-box" id="quizExplanationBox"></div>
+
+          <div style="text-align: right; margin-top: 1rem;">
+            <button class="btn btn-primary btn-lg" id="quizBtnNext" style="display: none;" onclick="window.quizEngine.nextQuestion()">
+              Soal Selanjutnya ➡️
+            </button>
+          </div>
+        </div>
+
+        <!-- Quiz Result Card -->
+        <div class="quiz-result-card" id="quizResultCard">
+          <img src="assets/images/gold-medal.jpg" alt="Medali Juara" class="result-medal" id="resultMedalImg">
+          <h2 class="result-title" id="resultTitle">Luar Biasa!</h2>
+          <div class="result-score-tag" id="resultScoreNumber">100</div>
+          <div style="font-weight: 700; color: #64748B; margin-bottom: 1rem;">POIN NILAI AKHIR</div>
+          <p class="result-feedback" id="resultFeedbackMsg">Kamu telah menyelesaikan seluruh soal tantangan pecahan!</p>
+
+          <!-- TP Mastery Breakdown -->
+          <div style="margin: 2rem 0;">
+            <h4 style="font-family: var(--font-display); font-size: 1.15rem; color: var(--neutral-800); margin-bottom: 0.75rem;">
+              📊 Analisis Penguasaan Tujuan Pembelajaran (TP):
+            </h4>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.75rem;" id="tpBreakdownContainer"></div>
+          </div>
+
+          <div class="result-actions">
+            <button class="btn btn-amber btn-lg" onclick="window.quizEngine.showCertificate()">
+              📜 Buka & Cetak Sertifikat Kelulusan
+            </button>
+            <button class="btn btn-outline btn-lg" onclick="window.quizEngine.startQuiz()">
+              🔄 Ulangi Kuis
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+
+  <!-- =========================================================================
+       PRINTABLE CERTIFICATE OF ACHIEVEMENT MODAL
+       ========================================================================= -->
+  <div class="certificate-modal-wrapper" id="certificateModal">
+    <div class="certificate-card">
+      <button class="cert-btn-close" onclick="window.quizEngine.closeCertificate()" title="Tutup Sertifikat">✕</button>
+
+      <div class="cert-border-inner">
+        <div class="cert-header">
+          <div class="cert-ribbon">⭐ PIAGAM PENGHARGAAN RESMI ⭐</div>
+          <h2 class="cert-title">SERTIFIKAT KELULUSAN</h2>
+          <div class="cert-subtitle">PETUALANGAN MATEMATIKA: MATERI PECAHAN KELAS IV SD</div>
+        </div>
+
+        <div class="cert-presented-to">DIBERIKAN DENGAN BANGGA KEPADA:</div>
+        <div class="cert-student-name" id="certStudentName">Bintang Juara 🐰</div>
+
+        <p class="cert-description" id="certScoreDesc">
+          Atas keberhasilan menyelesaikan seluruh rangkaian pembelajaran dan meraih nilai <strong>100/100</strong> pada Ujian Petualangan Matematika Materi Pecahan Kurikulum Merdeka Kelas 4 Sekolah Dasar.
+        </p>
+
+        <div class="cert-footer-row">
+          <!-- Left: Date -->
+          <div class="cert-sign-col">
+            <div style="font-weight: 700; color: #1E293B; font-size: 0.95rem;" id="certDate">16 Oktober 2026</div>
+            <div class="cert-sign-label">Tanggal Kelulusan</div>
+          </div>
+
+          <!-- Middle: Gold Seal Image -->
+          <div>
+            <img src="assets/images/gold-medal.jpg" alt="Segel Emas Juara" class="cert-seal-img">
+          </div>
+
+          <!-- Right: Digital Signature -->
+          <div class="cert-sign-col">
+            <div class="cert-sign-line">Guru Matematika</div>
+            <div class="cert-sign-label">Tim Kurikulum Merdeka</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="cert-action-bar">
+        <button class="btn btn-primary btn-lg" onclick="window.quizEngine.printCertificate()">
+          🖨️ Cetak / Unduh PDF Sertifikat
+        </button>
+        <button class="btn btn-outline btn-lg" onclick="window.quizEngine.closeCertificate()">
+          Tutup
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- =========================================================================
+       MODALS: PROFILE, BADGES & QUESTS
+       ========================================================================= -->
+  <!-- 1. PROFILE MODAL -->
+  <div class="modal-overlay" id="profileModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Edit Profil Petualang Cilik</h3>
+        <button class="modal-close-btn" id="btnCloseProfile">✕</button>
+      </div>
+
+      <label style="font-family: var(--font-display); font-weight: 700; font-size: 0.95rem; color: var(--neutral-700);">
+        Nama Lengkap Siswa:
+      </label>
+      <input type="text" id="profileNameInput" class="input-name" placeholder="Ketik nama kamu di sini..." value="Bintang Juara">
+
+      <label style="font-family: var(--font-display); font-weight: 700; font-size: 0.95rem; color: var(--neutral-700); margin-top: 1.25rem; display: block;">
+        Pilih Karakter Favoritmu:
+      </label>
+      <div class="avatar-selection-grid">
+        <div class="avatar-choice selected" data-emoji="🐰" data-name="Roro Kelinci">
+          <span class="avatar-choice-emoji">🐰</span>
+          <span class="avatar-choice-name">Roro Kelinci</span>
+        </div>
+        <div class="avatar-choice" data-emoji="🐻" data-name="Bimo Beruang">
+          <span class="avatar-choice-emoji">🐻</span>
+          <span class="avatar-choice-name">Bimo Beruang</span>
+        </div>
+        <div class="avatar-choice" data-emoji="🦉" data-name="Kiko Burung Hantu">
+          <span class="avatar-choice-emoji">🦉</span>
+          <span class="avatar-choice-name">Kiko Owl</span>
+        </div>
+        <div class="avatar-choice" data-emoji="🐱" data-name="Milo Kucing">
+          <span class="avatar-choice-emoji">🐱</span>
+          <span class="avatar-choice-name">Milo Kucing</span>
+        </div>
+        <div class="avatar-choice" data-emoji="🦊" data-name="Fani Rubah">
+          <span class="avatar-choice-emoji">🦊</span>
+          <span class="avatar-choice-name">Fani Rubah</span>
+        </div>
+        <div class="avatar-choice" data-emoji="🐼" data-name="Pandu Panda">
+          <span class="avatar-choice-emoji">🐼</span>
+          <span class="avatar-choice-name">Pandu Panda</span>
+        </div>
+      </div>
+
+      <div style="text-align: right; margin-top: 1.5rem;">
+        <button class="btn btn-primary" id="btnSaveProfile">Simpan Profil ✨</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. BADGES MODAL -->
+  <div class="modal-overlay" id="badgesModal">
+    <div class="modal-content" style="max-width: 600px;">
+      <div class="modal-header">
+        <h3 class="modal-title">🏅 Koleksi Lencana Prestasimu</h3>
+        <button class="modal-close-btn" id="btnCloseBadges">✕</button>
+      </div>
+      <p style="font-size: 0.9rem; color: #64748B;">
+        Selesaikan berbagai petualangan belajar untuk membuka lencana emas di bawah ini!
+      </p>
+      <div class="badges-grid" id="badgesModalGrid"></div>
+    </div>
+  </div>
+
+  <!-- 3. QUESTS MODAL -->
+  <div class="modal-overlay" id="questsModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">📜 Misi Belajar Hari Ini</h3>
+        <button class="modal-close-btn" id="btnCloseQuests">✕</button>
+      </div>
+      <p style="font-size: 0.9rem; color: #64748B; margin-bottom: 1rem;">
+        Selesaikan misi di bawah ini untuk mengumpulkan bonus poin XP dan naik level!
+      </p>
+      <div class="quest-list" id="questsModalList"></div>
+    </div>
+  </div>
+
+
+  <!-- =========================================================================
+       FOOTER
+       ========================================================================= -->
+  <footer class="app-footer">
+    <div class="footer-inner">
+      <div class="footer-logo">🍕 Pecahan Ceria Kelas 4 SD</div>
+      <p class="footer-text">
+        Media Pembelajaran Matematika Berbasis Gamifikasi Interaktif Kurikulum Merdeka Fase B. Dirancang untuk menumbuhkan minat belajar, kemandirian, dan nalar kritis siswa sekolah dasar.
+      </p>
+      <div class="footer-copy">
+        © 2026 Pecahan Ceria - Hak Cipta Dilindungi. Dibuat dengan cinta untuk generasi penerus bangsa.
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/audio.js"></script>
+  <script src="js/gamification.js"></script>
+  <script src="js/materi.js"></script>
+  <script src="js/game-pizza.js"></script>
+  <script src="js/game-catch.js"></script>
+  <script src="js/video.js"></script>
+  <script src="js/quiz.js"></script>
+  <script src="js/app.js"></script>
+
+</body>
+</html>
